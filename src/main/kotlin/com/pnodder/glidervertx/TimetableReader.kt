@@ -22,6 +22,7 @@ class TimetableReader @Inject constructor(
     private val timePattern = DateTimeFormatter.ofPattern("HHmm")
     private val datePattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 
+
     fun read() {
         val duration = measureTimeMillis {
             // TODO use coroutines to run in parallel
