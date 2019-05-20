@@ -4,8 +4,6 @@ import com.google.inject.Inject
 import com.pnodder.glidervertx.dao.*
 import com.pnodder.glidervertx.domain.*
 import com.pnodder.glidervertx.enums.TransactionType
-import java.io.BufferedReader
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -25,18 +23,19 @@ class TimetableReader @Inject constructor(
     private val datePattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 
     fun read() {
-        val stream = TimetableReader::class.java.classLoader.getResourceAsStream("glider_data.cif")
-        val reader = BufferedReader(stream.bufferedReader())
         val duration = measureTimeMillis {
-            reader.readLines().stream().filter { l -> l.startsWith("QD") }.forEach(::routeReader)
-//            reader.readLines().stream().filter { l -> l.startsWith("QS") }.forEach(::journeyReader)
-//            reader.readLines().stream().filter { l -> l.startsWith("QO") }.forEach(::journeyOriginReader)
-//            reader.readLines().stream().filter { l -> l.startsWith("QI") }.forEach(::journeyIntermediateReader)
-//            reader.readLines().stream().filter { l -> l.startsWith("QT") }.forEach(::journeyDestinationReader)
-//            reader.readLines().stream().filter { l -> l.startsWith("QL") }.forEach(::locationReader)
+            // TODO use coroutines to run in parallel
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QD") }.forEach(::routeReader)
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QS") }.forEach(::journeyReader)
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QO") }.forEach(::journeyOriginReader)
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QI") }.forEach(::journeyIntermediateReader)
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QT") }.forEach(::journeyDestinationReader)
+            getTimetableData().bufferedReader().readLines().stream().filter { l -> l.startsWith("QL") }.forEach(::locationReader)
         }
-        println("Timetable parsed in $duration ms")
+        println("Timetable parsed in ${duration}ms")
     }
+
+    private fun getTimetableData() = TimetableReader::class.java.classLoader.getResourceAsStream("glider_data.cif")
 
     // TODO store entities in a list and then insert all, save many db trips
     fun routeReader(line: String) {
@@ -47,7 +46,6 @@ class TimetableReader @Inject constructor(
             val direction = line.substring(11, 12)
             val description = line.substring(12, 80)
             val route = Route(TransactionType.valueOf(type), operator, number, direction, description)
-            //val i = db.routeDao().count(description)
             routeDao.insert(route)
         } else {
             println("QD line skipped- not 80 characters long!")
@@ -56,7 +54,6 @@ class TimetableReader @Inject constructor(
 
     fun journeyReader(line: String) {
         if (line.length == 65) {
-            val dateFormat = SimpleDateFormat("yyyyMMdd")
             val type = line.substring(2, 3)
             val operator = line.substring(3, 7)
             val identifier = line.substring(7, 13)
@@ -76,27 +73,9 @@ class TimetableReader @Inject constructor(
             val vehicleType = line.substring(48, 56)
             val regNum = line.substring(56, 64)
             val routeDirection = line.substring(64, 65)
-            val journey = Journey(
-                TransactionType.valueOf(type),
-                operator,
-                identifier,
-                LocalDate.parse(firstDate, datePattern),
-                LocalDate.parse(lastDate, datePattern),
-                mon.toInt(),
-                tues.toInt(),
-                weds.toInt(),
-                thurs.toInt(),
-                fri.toInt(),
-                sat.toInt(),
-                sun.toInt(),
-                schoolTerm,
-                bank,
-                routeNum,
-                runningBoard,
-                vehicleType,
-                regNum,
-                routeDirection
-            )
+            val journey = Journey(TransactionType.valueOf(type), operator, identifier, LocalDate.parse(firstDate, datePattern),
+                LocalDate.parse(lastDate, datePattern), mon.toInt(), tues.toInt(), weds.toInt(), thurs.toInt(), fri.toInt(),
+                sat.toInt(), sun.toInt(), schoolTerm, bank, routeNum, runningBoard, vehicleType, regNum, routeDirection)
             journeyDao.insert(journey)
         } else {
             println("QS line skipped, expected 65 chars got ${line.length}")
@@ -127,10 +106,8 @@ class TimetableReader @Inject constructor(
             val bayNumber = line.substring(23, 26)
             val timingIndicator = line.substring(26, 28)
             val fareIndicator = line.substring(28, 30)
-            val journeyIntermediate = JourneyIntermediate(
-                location, LocalTime.parse(arrivalTime, timePattern),
-                LocalTime.parse(depTime, timePattern), activityFlag, bayNumber, timingIndicator, fareIndicator
-            )
+            val journeyIntermediate = JourneyIntermediate(location, LocalTime.parse(arrivalTime, timePattern),
+                LocalTime.parse(depTime, timePattern), activityFlag, bayNumber, timingIndicator, fareIndicator)
             journeyIntermediateDao.insert(journeyIntermediate)
         } else {
             println("QI line skipped, expected 30 chars got ${line.length}")
@@ -144,10 +121,8 @@ class TimetableReader @Inject constructor(
             val bayNumber = line.substring(18, 21)
             val timingIndicator = line.substring(21, 23)
             val fareIndicator = line.substring(23, 25)
-            val journeyDestination = JourneyDestination(
-                location, LocalTime.parse(arrivalTime, timePattern), bayNumber,
-                timingIndicator, fareIndicator
-            )
+            val journeyDestination = JourneyDestination(location, LocalTime.parse(arrivalTime, timePattern), bayNumber,
+                timingIndicator, fareIndicator)
             journeyDestinationDao.insert(journeyDestination)
         } else {
             println("QT line skipped, expected 25 chars got ${line.length}")

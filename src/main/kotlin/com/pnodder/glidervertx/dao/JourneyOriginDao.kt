@@ -1,7 +1,9 @@
 package com.pnodder.glidervertx.dao
 
 import com.google.inject.Inject
+import com.mongodb.client.FindIterable
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.model.Filters.eq
 import com.pnodder.glidervertx.JourneyOrigCollection
 import com.pnodder.glidervertx.domain.JourneyOrigin
 import org.bson.Document
@@ -28,4 +30,7 @@ class JourneyOriginDao @Inject constructor(@JourneyOrigCollection private val co
     override fun delete(t: JourneyOrigin) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+    
+    fun findJourneyOriginByLocation(location: String) = collection.find(eq("location", location))
+        
 }

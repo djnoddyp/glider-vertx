@@ -2,6 +2,7 @@ package com.pnodder.glidervertx.dao
 
 import com.google.inject.Inject
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.model.Filters.eq
 import com.pnodder.glidervertx.LocationCollection
 import com.pnodder.glidervertx.domain.Location
 import org.bson.Document
@@ -26,4 +27,6 @@ class LocationDao @Inject constructor(@LocationCollection val collection: MongoC
     override fun delete(t: Location) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+    
+    fun findByFullLocation(fullLocation: String) = collection.find(eq("fullLocation", fullLocation))  
 }
