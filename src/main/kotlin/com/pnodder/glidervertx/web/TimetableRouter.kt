@@ -24,21 +24,21 @@ class TimetableRouter(val journeyService: JourneyService, val locationService: L
         vertx.createHttpServer().requestHandler(router).listen(8086)
     }
 
-    fun handleGetJourneysForLocation(routingContext: RoutingContext) {
+    private fun handleGetJourneysForLocation(routingContext: RoutingContext) {
         log.info("Handling journey origin request")
         val location = locationService.findLocationFromFullLocation(routingContext.pathParam("fullLocation"))
         val array = JsonArray(journeyService.findOriginByLocation(location))
         generateResponse(routingContext, array)
     }
 
-    fun handleJourneyFromTo(routingContext: RoutingContext) {
+    private fun handleJourneyFromTo(routingContext: RoutingContext) {
         log.info("Handling upcoming journeys request")
         val fromLocation = locationService.findLocationFromFullLocation(routingContext.pathParam("fromLocation"))
         val array = JsonArray(journeyService.findNJourneysFromNow(fromLocation, 3))
         generateResponse(routingContext, array)
     }
     
-    fun handleFindAllLocations(routingContext: RoutingContext) {
+    private fun handleFindAllLocations(routingContext: RoutingContext) {
         log.info("Handling all locations request")
         val array = JsonArray(locationService.findAll())
         generateResponse(routingContext, array)

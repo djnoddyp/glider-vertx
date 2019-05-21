@@ -1,6 +1,5 @@
 package com.pnodder.glidervertx.services
 
-import com.mongodb.client.FindIterable
 import com.pnodder.glidervertx.dao.JourneyOriginDao
 import org.bson.Document
 import java.time.LocalTime
