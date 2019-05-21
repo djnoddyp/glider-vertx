@@ -33,7 +33,7 @@ class TimetableModule : AbstractModule() {
     
     @Provides @JourneyDestCollection
     fun provideJourneyDestCollection(): MongoCollection<Document> {
-        return db.getCollection("journey_collection")
+        return db.getCollection("journey_destination")
     }    
     
     @Provides @JourneyIntCollection

@@ -1,31 +1,25 @@
 package com.pnodder.glidervertx.services
 
+import com.mongodb.client.FindIterable
 import com.pnodder.glidervertx.dao.JourneyOriginDao
-import io.vertx.core.json.JsonArray
 import org.bson.Document
 import java.time.LocalTime
 import java.time.ZoneId
-import java.util.*
 
 class JourneyService(private val journeyOriginDao: JourneyOriginDao) {
 
-    fun findOriginByLocation(location: String): JsonArray {
-        val array = JsonArray()
-        journeyOriginDao.findJourneyOriginByLocation(location).forEach { jo -> array.add(jo) }
-        return array
+    fun findOriginByLocation(location: String): List<Document> {
+        return journeyOriginDao.findJourneyOriginByLocation(location).toList()
     }
 
-    fun findNJourneysFromNow(location: String, numOfJourneys: Int): JsonArray {
-        val array = JsonArray()
-        journeyOriginDao.findJourneyOriginByLocation(location)
-            .filter(this::checkDepartureTime)
+    fun findNJourneysFromNow(location: String, numOfJourneys: Int): List<Document> {
+        return journeyOriginDao.findJourneyOriginByLocation(location)
+            .filter(this::departureTimeAfterNow)
             .take(numOfJourneys)
-            .forEach { j -> array.add(j) }
-        return array
     }
 
-    private fun checkDepartureTime(doc: Document): Boolean {
-        val depTime = LocalTime.ofInstant((doc.get("departureTime") as Date).toInstant(), ZoneId.systemDefault())
+    private fun departureTimeAfterNow(doc: Document): Boolean {
+        val depTime = doc.getDate("departureTime").toInstant().atZone(ZoneId.systemDefault()).toLocalTime()
         return depTime.isAfter(LocalTime.now())
     }
 }

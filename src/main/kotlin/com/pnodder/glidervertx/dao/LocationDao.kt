@@ -3,6 +3,7 @@ package com.pnodder.glidervertx.dao
 import com.google.inject.Inject
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters.eq
+import com.mongodb.client.model.Projections.include
 import com.pnodder.glidervertx.LocationCollection
 import com.pnodder.glidervertx.domain.Location
 import org.bson.Document
@@ -28,5 +29,7 @@ class LocationDao @Inject constructor(@LocationCollection val collection: MongoC
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
     
-    fun findByFullLocation(fullLocation: String) = collection.find(eq("fullLocation", fullLocation))  
+    fun findByFullLocation(fullLocation: String) = collection.find(eq("fullLocation", fullLocation))
+    
+    fun findAllFullLocations() = collection.find(Document()).projection(include("fullLocation"))
 }

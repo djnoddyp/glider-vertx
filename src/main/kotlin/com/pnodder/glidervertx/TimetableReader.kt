@@ -22,7 +22,6 @@ class TimetableReader @Inject constructor(
     private val timePattern = DateTimeFormatter.ofPattern("HHmm")
     private val datePattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 
-
     fun read() {
         val duration = measureTimeMillis {
             // TODO use coroutines to run in parallel
@@ -90,8 +89,7 @@ class TimetableReader @Inject constructor(
             val stopId = line.substring(18, 21)
             val timingIndicator = line.substring(21, 23)
             val fareIndicator = line.substring(23, 25)
-            val journeyOrigin =
-                JourneyOrigin(location, LocalTime.parse(depTime, timePattern), stopId, timingIndicator, fareIndicator)
+            val journeyOrigin = JourneyOrigin(location, LocalTime.parse(depTime, timePattern), stopId, timingIndicator, fareIndicator)
             journeyOriginDao.insert(journeyOrigin)
         } else {
             println("QO line skipped, expected 25 chars got ${line.length}")

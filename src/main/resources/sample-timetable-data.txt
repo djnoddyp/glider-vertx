@@ -1,0 +1,66 @@
+> db.route.findOne()
+{
+  "_id" : ObjectId("5ce41945a9b41045c84bf1b2"),
+  "transactionType" : "New",
+  "operator" : "GDR ",
+  "number" : "G1  ",
+  "direction" : "O",
+  "description" : "McKinstry Roundabout - City Centre - Dundonald                      "
+}
+> db.journey.findOne()
+{
+  "_id" : ObjectId("5ce41946a9b41045c84bf49e"),
+  "transactionType" : "New",
+  "operator" : "GDR ",
+  "identifier" : "0520  ",
+  "firstDateOfOperation" : ISODate("2019-01-02T00:00:00Z"),
+  "lastDateOfOperation" : ISODate("2019-06-30T00:00:00Z"),
+  "onMondays" : 1,
+  "onTuesdays" : 1,
+  "onWednesdays" : 1,
+  "onThursdays" : 1,
+  "onFridays" : 1,
+  "onSaturdays" : 0,
+  "onSundays" : 0,
+  "schoolTermTime" : " ",
+  "bankHolidays" : "X",
+  "routeNumber" : "G1  ",
+  "runningBoard" : "G1M05 ",
+  "vehicleType" : "GDR     ",
+  "registrationNumber" : "        ",
+  "routeDirection" : "O"
+}
+> db.journey_origin.findOne()
+{
+  "_id" : ObjectId("5ce41947a9b41045c84bf78a"),
+  "location" : "700000001646",
+  "departureTime" : ISODate("1970-01-01T05:20:00Z"),
+  "stopIdentifier" : "WP1",
+  "timingPointIndicator" : "T1",
+  "fareStageIndicator" : "  "
+}
+> db.location.findOne()
+{
+  "_id" : ObjectId("5ce41959a9b41045c84c5c61"),
+  "transactionType" : "N",
+  "location" : "700000000402",
+  "fullLocation" : "Creighton Mews"
+}
+> db.journey_intermediate.findOne()
+{
+  "_id" : ObjectId("5ce41947a9b41045c84bfa76"),
+  "location" : "700000001437",
+  "arrivalTime" : ISODate("1970-01-01T05:22:00Z"),
+  "departureTime" : ISODate("1970-01-01T05:22:00Z"),
+  "bayNumber" : "   ",
+  "timingPointIndicator" : "T0",
+  "fareStageIndicator" : "  "
+}
+> db.journey_destination.findOne()
+{
+  "_id" : ObjectId("5ce41959a9b41045c84c5975"),
+  "location" : "700000016011",
+  "arrivalTime" : ISODate("1970-01-01T05:45:00Z"),
+  "bayNumber" : "   ",
+  "timingPointIndicator" : "T1"
+}
