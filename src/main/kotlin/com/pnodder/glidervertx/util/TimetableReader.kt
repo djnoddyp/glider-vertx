@@ -1,7 +1,7 @@
 //package com.pnodder.glidervertx
 //
 //import com.google.inject.Inject
-//import com.pnodder.glidervertx.dao.*
+//import com.pnodder.glidervertx.data.*
 //import com.pnodder.glidervertx.domain.*
 //import com.pnodder.glidervertx.enums.TransactionType
 //import java.time.LocalDate

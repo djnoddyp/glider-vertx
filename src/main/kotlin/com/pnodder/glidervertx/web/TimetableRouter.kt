@@ -1,6 +1,6 @@
 //package com.pnodder.glidervertx.web
 //
-//import com.pnodder.glidervertx.services.JourneyService
+//import com.pnodder.glidervertx.services.JourneyServiceImpl
 //import com.pnodder.glidervertx.services.LocationService
 //import io.vertx.core.AbstractVerticle
 //import io.vertx.core.http.HttpHeaders
@@ -11,7 +11,7 @@
 //import org.slf4j.LoggerFactory
 //
 //
-//class TimetableRouter(val journeyService: JourneyService, val locationService: LocationService) : AbstractVerticle() {
+//class TimetableRouter(val journeyService: JourneyServiceImpl, val locationService: LocationService) : AbstractVerticle() {
 //    
 //    private val log = LoggerFactory.getLogger(TimetableRouter::class.java)
 //

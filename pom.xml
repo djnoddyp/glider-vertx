@@ -64,16 +64,11 @@
             <artifactId>vertx-unit</artifactId>
             <version>${vertx.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-mongo-client</artifactId>
-            <version>${vertx.version}</version>
-        </dependency>
-        
+
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-async</artifactId>
-            <version>3.2.2</version>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.10.2</version>
         </dependency>
 
         <dependency>

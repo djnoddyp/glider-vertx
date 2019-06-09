@@ -5,7 +5,7 @@
 //import com.mongodb.MongoClient
 //import com.mongodb.client.MongoCollection
 //import com.mongodb.client.MongoDatabase
-//import com.pnodder.glidervertx.dao.RouteDao
+//import com.pnodder.glidervertx.data.RouteDao
 //import org.bson.Document
 //
 //class TimetableModule : AbstractModule() {

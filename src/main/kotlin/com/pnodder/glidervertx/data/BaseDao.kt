@@ -1,4 +1,4 @@
-package com.pnodder.glidervertx.dao
+package com.pnodder.glidervertx.data
 
 interface BaseDao<T> {
 
