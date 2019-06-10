@@ -86,7 +86,7 @@ class HttpServerVerticle : AbstractVerticle() {
 
         vertx.eventBus().send<JsonObject>(ttdbQueue, JsonObject(), options) { reply ->
             if (reply.succeeded()) {
-                val locations = reply.result().body().getValue("data") as JsonArray
+                val locations = reply.result().body().getJsonArray("result")
                 generateResponse(routingContext, locations)
             } else {
 
@@ -102,7 +102,7 @@ class HttpServerVerticle : AbstractVerticle() {
 
         vertx.eventBus().send<JsonObject>(ttdbQueue, locationQuery, options) { reply ->
             if (reply.succeeded()) {
-                val response = reply.result().body().getString("data")
+                val response = reply.result().body().getString("result")
                 log.info("location data received: $response")
                 future.complete(response)
             } else {
@@ -118,9 +118,9 @@ class HttpServerVerticle : AbstractVerticle() {
         val journeyOriginQuery = JsonObject().put("location", location)
         val options = DeliveryOptions().addHeader("action", "getDeparturesFromLocation")
 
-        vertx.eventBus().send<JsonArray>(ttdbQueue, journeyOriginQuery, options) { reply ->
+        vertx.eventBus().send<JsonObject>(ttdbQueue, journeyOriginQuery, options) { reply ->
             if (reply.succeeded()) {
-                val response = reply.result() as JsonArray
+                val response = reply.result().body().getJsonArray("result")
                 log.info("journey origin data received: $response")
                 future.complete(response)
             } else {

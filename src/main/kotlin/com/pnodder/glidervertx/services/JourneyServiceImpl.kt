@@ -5,6 +5,7 @@ import io.vertx.core.json.JsonArray
 import org.bson.Document
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.*
 
 class JourneyServiceImpl(private val journeyOriginDao: JourneyOriginDao) : JourneyService {
 
@@ -26,7 +27,12 @@ class JourneyServiceImpl(private val journeyOriginDao: JourneyOriginDao) : Journ
 
         return JsonArray(journeyOriginDao.findJourneyOriginByLocation(location)
             .filter(::isDepartureTimeAfterNow)
-            .take(numOfJourneys))
+            .take(numOfJourneys)
+            .map { j -> j.getDate("departureTime") })
+    }
+    
+    fun transformDate(date: Date) {
+        
     }
 
 }

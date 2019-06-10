@@ -43,7 +43,7 @@ class DatabaseVerticle : AbstractVerticle() {
         val locationQuery = message.body()
         val location = locationService.findLocationFromFullLocation(locationQuery.getString("fullLocation"))
         if (location.isNotEmpty()) {
-            message.reply(location)
+            message.reply(JsonObject().put("result", location))
         } else {
             message.fail(69, "Empty response for query: $locationQuery")
         }
@@ -52,11 +52,11 @@ class DatabaseVerticle : AbstractVerticle() {
     private fun departuresFromLocation(message: Message<JsonObject>) {
         val journeyOriginQuery = message.body()
         val departures = journeyService.findJourneyOriginByLocation(journeyOriginQuery.getString("location"))
-        message.reply(departures)
+        message.reply(JsonObject().put("result", departures))
     }
 
     private fun allLocations(message: Message<JsonObject>) {
-        message.reply(JsonObject().put("data", locationService.findAll()))
+        message.reply(JsonObject().put("result", locationService.findAll()))
     }
 
     private fun getMessageString(message: Message<JsonObject>) =

@@ -13,6 +13,7 @@ class MainVerticle : AbstractVerticle() {
         vertx.deployVerticle(DatabaseVerticle()) // db verticle starts synchronously
         vertx.deployVerticle("com.pnodder.glidervertx.web.HttpServerVerticle",
             DeploymentOptions().setInstances(2), httpVerticleDeployment)
+        val eventBus = vertx.eventBus()
 
         httpVerticleDeployment.setHandler { ar ->
             if (ar.succeeded()) {
